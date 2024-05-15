@@ -14,7 +14,11 @@ func WinogradOriginal(A [][]int, B [][]int) ([][]int, int64) {
 	P := len(B)
 	M := len(A)
 
-	var Result [][]int
+	Result := make([][]int, M)
+	for i := range Result {
+		Result[i] = make([]int, N)
+	}
+
 	var i, j, k int
 	var aux int
 	upsilon := P % 2
@@ -35,8 +39,8 @@ func WinogradOriginal(A [][]int, B [][]int) ([][]int, int64) {
 		}
 		z[i] = aux
 	}
-	if upsilon == 1 {
 
+	if upsilon == 1 {
 		PP := P - 1
 		for i = 0; i < M; i++ {
 			for k = 0; k < N; k++ {
@@ -48,7 +52,6 @@ func WinogradOriginal(A [][]int, B [][]int) ([][]int, int64) {
 			}
 		}
 	} else {
-
 		for i = 0; i < M; i++ {
 			for k = 0; k < N; k++ {
 				aux = 0

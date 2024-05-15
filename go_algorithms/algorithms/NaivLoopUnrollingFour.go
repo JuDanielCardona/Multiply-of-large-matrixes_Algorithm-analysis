@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func NaiveLoopUnrollingFour(A [][]int, B [][]int) ([][]int, int64) {
+func NaivLoopUnrollingFour(A [][]int, B [][]int) ([][]int, int64) {
 
 	fmt.Println("Método: naiveLoopUnrollingFour")
 

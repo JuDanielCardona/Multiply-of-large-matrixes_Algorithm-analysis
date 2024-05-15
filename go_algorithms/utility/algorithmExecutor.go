@@ -16,7 +16,7 @@ func Init_GoExecution(matrixA [][]int, matrixB [][]int) {
 	executionTimes["NaiveLoopUnrollingTwo"] = time
 	fmt.Print(time, result, "\n\n")
 
-	result, time = algorithms.NaiveLoopUnrollingFour(matrixA, matrixB)
+	result, time = algorithms.NaivLoopUnrollingFour(matrixA, matrixB)
 	executionTimes["NaiveLoopUnrollingFour"] = time
 	fmt.Print(time, result, "\n\n")
 
@@ -32,8 +32,39 @@ func Init_GoExecution(matrixA [][]int, matrixB [][]int) {
 	executionTimes["StrassenNaiv"] = time
 	fmt.Print(time, result, "\n\n")
 
-	result, time = algorithms.StrassenNaiv(matrixA, matrixB)
-	executionTimes["StrassenNaiv"] = time
+	result, time = algorithms.StrassenWinograd(matrixA, matrixB)
+	executionTimes["StrassenWinograd"] = time
 	fmt.Print(time, result, "\n\n")
 
+	result, time = algorithms.RowByColumnSequential(matrixA, matrixB)
+	executionTimes["RowByColumnSequential"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.RowByColumnParallel(matrixA, matrixB)
+	executionTimes["RowByColumnParallel"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.RowByColumnEnhanced(matrixA, matrixB)
+	executionTimes["RowByColumnEnhanced"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.RowByRowSequential(matrixA, matrixB)
+	executionTimes["RowByRowSequential"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.RowByRowParallel(matrixA, matrixB)
+	executionTimes["RowByRowParallel"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.RowByColumnEnhanced(matrixA, matrixB)
+	executionTimes["RowByColumnEnhanced"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.ColumnByColumnSequential(matrixA, matrixB)
+	executionTimes["ColumnByColumnSequential"] = time
+	fmt.Print(time, result, "\n\n")
+
+	result, time = algorithms.ColumnByColumnParallel(matrixA, matrixB)
+	executionTimes["ColumnByColumnParallel"] = time
+	fmt.Print(time, result, "\n\n")
 }
