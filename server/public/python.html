@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution Times - python</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1 id="pageTitle">Execution Times - python</h1>
+    <label for="testSelector">Select Test:</label>
+    <select id="testSelector"></select>
+    <table id="executionTimesTable">
+        <thead>
+            <tr>
+                <th>Algorithm</th>
+                <th>Time (ms)</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <canvas id="barChart" width="400" height="200"></canvas>
+    <button onclick="window.location.href='golang.html'">View Golang Times</button>
+    <button onclick="window.location.href='index.html'">View comparative Times</button>
+
+    <script>
+        async function fetchTests() {
+            try {
+                const response = await fetch('http://localhost:3000/tests/python');
+                const data = await response.json();
+                const testSelector = document.getElementById('testSelector');
+                testSelector.innerHTML = '';
+
+                data.forEach(test => {
+                    const option = document.createElement('option');
+                    option.value = test;
+                    option.textContent = test;
+                    testSelector.appendChild(option);
+                });
+
+                if (data.length > 0) {
+                    fetchExecutionTimes(data[0]);
+                    document.getElementById('pageTitle').textContent = `Execution Times - python (${data[0]})`;
+                }
+            } catch (error) {
+                console.error('Error fetching tests:', error);
+            }
+        }
+
+        async function fetchExecutionTimes(test) {
+            try {
+                const response = await fetch(`http://localhost:3000/execution_times/python/${test}`);
+                const data = await response.json();
+
+                const tableBody = document.querySelector('#executionTimesTable tbody');
+                tableBody.innerHTML = '';
+
+                data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.algorithm}</td>
+                        <td>${row.time}</td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+
+                document.getElementById('pageTitle').textContent = `Execution Times - python (${test})`;
+
+                fetchBarChartData(test);
+            } catch (error) {
+                console.error('Error fetching execution times:', error);
+            }
+        }
+
+        async function fetchBarChartData(test) {
+            try {
+                const response = await fetch(`http://localhost:3000/bar_chart_data/python/${test}`);
+                const data = await response.json();
+
+                const labels = data.map(row => row.algorithm);
+                const times = data.map(row => row.time);
+
+                const barChart = Chart.getChart('barChart');
+                barChart.data.labels = labels;
+                barChart.data.datasets[0].data = times;
+                barChart.update();
+            } catch (error) {
+                console.error('Error fetching bar chart data:', error);
+            }
+        }
+
+        document.getElementById('testSelector').addEventListener('change', (event) => {
+            const selectedTest = event.target.value;
+            fetchExecutionTimes(selectedTest);
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const ctx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Time (ms)',
+                        data: [],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+            fetchTests();
+        });
+
+    </script>
+
+</body>
+
+</html>
